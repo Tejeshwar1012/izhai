@@ -1408,6 +1408,36 @@
             text-align: center
         }
 
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: #e0e0e0;
+            border-radius: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .payment-method.active .toggle-switch {
+            background: var(--purple-500);
+        }
+
+        .payment-method.active .toggle-switch::after {
+            transform: translateX(20px);
+        }
+
         .cart-footer {
             padding: 20px;
             border-top: 1px solid #f0f0f0;
@@ -2451,14 +2481,14 @@
             <h2 class="profile-name heading" id="profileName">Guest User</h2>
             <p class="profile-email" id="profileEmail">guest@izhai.com</p>
             <div class="profile-menu">
-                <button class="profile-menu-item">
+                <button class="profile-menu-item" onclick="App.showEditProfile()">
                     <svg viewBox="0 0 24 24">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                         <circle cx="12" cy="7" r="4" />
                     </svg>
                     <span>Edit Profile</span>
                 </button>
-                <button class="profile-menu-item">
+                <button class="profile-menu-item" onclick="App.showOrders()">
                     <svg viewBox="0 0 24 24">
                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
                         <line x1="3" y1="6" x2="21" y2="6" />
@@ -2466,14 +2496,14 @@
                     </svg>
                     <span>My Orders</span>
                 </button>
-                <button class="profile-menu-item">
+                <button class="profile-menu-item" onclick="App.showWishlistScreen()">
                     <svg viewBox="0 0 24 24">
                         <path
                             d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                     </svg>
                     <span>Wishlist</span>
                 </button>
-                <button class="profile-menu-item">
+                <button class="profile-menu-item" onclick="App.showSettings()">
                     <svg viewBox="0 0 24 24">
                         <circle cx="12" cy="12" r="3" />
                         <path
@@ -2570,6 +2600,89 @@
 
                 <button type="submit" class="form-btn ripple">Save Product</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Edit Profile Screen -->
+    <div class="screen" id="editProfileScreen">
+        <div class="checkout-header">
+            <button class="back-btn" onclick="App.showProfile()">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+            </button>
+            <h1 class="checkout-title heading">Edit Profile</h1>
+        </div>
+        <div class="auth-container" style="padding-top:20px; min-height:auto">
+            <form onsubmit="App.saveProfile(event)" id="editProfileForm">
+                <div class="form-group">
+                    <input type="text" class="form-input" id="editName" placeholder=" " required>
+                    <label class="form-label">Full Name</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-input" id="editEmail" placeholder=" " required>
+                    <label class="form-label">Email</label>
+                </div>
+                <button type="submit" class="form-btn ripple">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- My Orders Screen -->
+    <div class="screen" id="ordersScreen">
+        <div class="checkout-header">
+            <button class="back-btn" onclick="App.showProfile()">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+            </button>
+            <h1 class="checkout-title heading">My Orders</h1>
+        </div>
+        <div class="checkout-content" id="ordersList" style="padding:20px 0">
+            <!-- Orders injected here -->
+        </div>
+    </div>
+
+    <!-- Wishlist Screen -->
+    <div class="screen" id="wishlistScreen">
+        <div class="checkout-header">
+            <button class="back-btn" onclick="App.showProfile()">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+            </button>
+            <h1 class="checkout-title heading">My Wishlist</h1>
+        </div>
+        <div class="product-grid" id="wishlistGrid" style="padding:20px; padding-bottom:100px">
+            <!-- Wishlist items injected here -->
+        </div>
+    </div>
+
+    <!-- Settings Screen -->
+    <div class="screen" id="settingsScreen">
+        <div class="checkout-header">
+            <button class="back-btn" onclick="App.showProfile()">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+            </button>
+            <h1 class="checkout-title heading">Settings</h1>
+        </div>
+        <div class="checkout-section">
+            <div class="payment-method" onclick="this.classList.toggle('active')">
+                <div class="payment-info">
+                    <div class="payment-name">Push Notifications</div>
+                    <div class="payment-desc">Get updates on new collections</div>
+                </div>
+                <div class="toggle-switch"></div>
+            </div>
+            <div class="payment-method" onclick="this.classList.toggle('active')">
+                <div class="payment-info">
+                    <div class="payment-name">Dark Mode</div>
+                    <div class="payment-desc">Experience Izhai in dark theme</div>
+                </div>
+                <div class="toggle-switch"></div>
+            </div>
         </div>
     </div>
     <script> /*
@@ -2902,18 +3015,52 @@ p.name</div><divclass="product−price">₹{p.price.toLocaleString('en-IN')}</di
                 icon.className = 'payment-status-icon processing';
                 icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>';
                 title.textContent = 'Processing Payment';
-                desc.textContent = 'Please wait while we set up the transaction details...';
+                desc.textContent = 'Opening your payment app...';
                 btn.classList.add('hidden');
+                
+                // Add a cancel button for failure state simulation
+                let cancelBtn = document.getElementById('paymentCancelBtn');
+                if(!cancelBtn) {
+                    cancelBtn = document.createElement('button');
+                    cancelBtn.id = 'paymentCancelBtn';
+                    cancelBtn.className = 'btn ripple';
+                    cancelBtn.style.background = 'var(--bg-secondary)';
+                    cancelBtn.style.color = 'var(--text-secondary)';
+                    cancelBtn.style.marginTop = '12px';
+                    cancelBtn.textContent = 'Cancel Payment';
+                    cancelBtn.onclick = () => App.cancelPayment();
+                    document.querySelector('.payment-modal-content').appendChild(cancelBtn);
+                }
+                cancelBtn.classList.remove('hidden');
 
                 modal.classList.add('active');
 
-                setTimeout(() => {
+                // Simulate handoff delay then success
+                this.paymentTimer = setTimeout(() => {
+                    cancelBtn.classList.add('hidden');
                     icon.className = 'payment-status-icon success';
                     icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>';
-                    title.textContent = 'Order Recorded!';
-                    desc.textContent = 'Please confirm your payment and send order details to us on WhatsApp.';
+                    title.textContent = 'Payment Handoff Complete';
+                    desc.textContent = 'Please confirm the transaction in your app and send us the details.';
                     btn.classList.remove('hidden');
-                }, 2500);
+                }, 3000);
+            },
+            
+            cancelPayment() {
+                clearTimeout(this.paymentTimer);
+                const icon = document.getElementById('paymentStatusIcon');
+                const title = document.getElementById('paymentStatusTitle');
+                const desc = document.getElementById('paymentStatusDesc');
+                const cancelBtn = document.getElementById('paymentCancelBtn');
+                
+                icon.className = 'payment-status-icon error';
+                icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="var(--rose-500)" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+                icon.style.borderColor = 'var(--rose-500)';
+                title.textContent = 'Payment Failed';
+                desc.textContent = 'The transaction was cancelled or timed out. Please try again.';
+                
+                cancelBtn.textContent = 'Close';
+                cancelBtn.onclick = () => App.closePaymentModal();
             },
 
             confirmOrder() {
@@ -3074,6 +3221,76 @@ p.name</div><divclass="product−price">₹{p.price.toLocaleString('en-IN')}</di
                 alert('Product Added Successfully!');
                 this.closeAddProduct();
                 this.newProductImage = null;
+            },
+
+            showEditProfile() {
+                this.closeProfile();
+                document.getElementById('editName').value = this.user?.name || '';
+                document.getElementById('editEmail').value = this.user?.email || '';
+                this.showScreen('editProfileScreen');
+            },
+
+            saveProfile(e) {
+                e.preventDefault();
+                const name = document.getElementById('editName').value;
+                const email = document.getElementById('editEmail').value;
+                this.user = { ...this.user, name, email };
+                this.updateProfileUI();
+                alert('Profile updated successfully!');
+                this.showProfile();
+            },
+
+            showOrders() {
+                this.closeProfile();
+                const container = document.getElementById('ordersList');
+                // Mock orders
+                const orders = [
+                    { id: '#ORD-8821', date: '26 Dec 2024', total: 8999, status: 'Delivered', items: 'Royal Purple Silk Saree' },
+                    { id: '#ORD-7732', date: '12 Nov 2024', total: 3499, status: 'Shipped', items: 'Teal Anarkali Kurti' }
+                ];
+                
+                container.innerHTML = orders.map(o => `
+                    <div style="background:var(--bg-secondary); padding:16px; margin-bottom:12px; border-radius:12px">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:8px">
+                            <span style="font-weight:600; font-size:14px">${o.id}</span>
+                            <span style="font-size:12px; padding:4px 8px; border-radius:12px; background:${o.status==='Delivered'?'#e8f5e9':'#fff3e0'}; color:${o.status==='Delivered'?'#2e7d32':'#ef6c00'}">${o.status}</span>
+                        </div>
+                        <div style="font-size:14px; margin-bottom:4px; color:var(--text-secondary)">${o.items}</div>
+                        <div style="font-size:12px; color:var(--text-muted)">${o.date} • ₹${o.total.toLocaleString('en-IN')}</div>
+                    </div>
+                `).join('');
+                this.showScreen('ordersScreen');
+            },
+
+            showWishlistScreen() {
+                this.closeProfile();
+                const grid = document.getElementById('wishlistGrid');
+                const items = this.products.filter(p => this.wishlist.includes(p.id));
+                
+                if (items.length === 0) {
+                    grid.innerHTML = '<div class="search-empty"><p>Your wishlist is empty</p></div>';
+                } else {
+                    grid.innerHTML = items.map((p, idx) => `
+                        <div class="product-card" onclick="App.showProduct(${p.id})">
+                            <div class="product-img">
+                                <img src="${p.image}" alt="${p.name}" loading="lazy">
+                                <button class="wishlist-btn active" onclick="event.stopPropagation(); App.toggleWishlist(${p.id}); App.showWishlistScreen()">
+                                    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                </button>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">${p.name}</div>
+                                <div class="product-price">₹${p.price.toLocaleString('en-IN')}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+                this.showScreen('wishlistScreen');
+            },
+
+            showSettings() {
+                this.closeProfile();
+                this.showScreen('settingsScreen');
             },
 
             deleteProduct(id) {
